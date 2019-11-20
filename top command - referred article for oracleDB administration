@@ -1,0 +1,304 @@
+top
+The top command is probably the most useful one for an Oracle DBA managing a database on Linux.
+Say the system is slow and you want to find out who is gobbling up all the CPU and/or memory.
+To display the top processes, you use the command top.
+
+Note that unlike other commands, top does not produce an output and sits still.
+It refreshes the screen to display new information. 
+So, if you just issue top and leave the screen up, the most current information is always up.
+To stop and exit to shell, you can press Control-C.
+
+$ top
+
+18:46:13  up 11 days, 21:50,  5 users,  load average: 0.11, 0.19, 0.18 
+151 processes: 147 sleeping, 4 running, 0 zombie, 0 stopped 
+CPU states:  cpu    user    nice  system    irq  softirq  iowait    idle 
+total   12.5%    0.0%    6.7%   0.0%     0.0%    5.3%   75.2% 
+Mem:  1026912k av,  999548k used,   27364k free,       0k shrd,  116104k buff 
+758312k actv,  145904k in_d,   16192k in_c 
+Swap: 2041192k av,  122224k used, 1918968k free                  590140k cached 
+
+PID USER     PRI  NI  SIZE  RSS SHARE STAT %CPU %MEM   TIME CPU COMMAND 
+451 oracle    15   0  6044 4928  4216 S     0.1  0.4   0:20   0 tnslsnr 
+8991 oracle    15   0  1248 1248   896 R     0.1  0.1   0:00   0 top 
+1 root      19   0   440  400   372 S     0.0  0.0   0:04   0 init 
+2 root      15   0     0    0     0 SW    0.0  0.0   0:00   0 keventd 
+3 root      15   0     0    0     0 SW    0.0  0.0   0:00   0 kapmd 
+4 root      34  19     0    0     0 SWN   0.0  0.0   0:00   0 ksoftirqd/0 
+7 root      15   0     0    0     0 SW    0.0  0.0   0:01   0 bdflush 
+5 root      15   0     0    0     0 SW    0.0  0.0   0:33   0 kswapd 
+6 root      15   0     0    0     0 SW    0.0  0.0   0:14   0 kscand 
+8 root      15   0     0    0     0 SW    0.0  0.0   0:00   0 kupdated 
+9 root      25   0     0    0     0 SW    0.0  0.0   0:00   0 mdrecoveryd
+
+... output snipped ...
+
+$ top
+
+18:46:13  up 11 days, 21:50,  5 users,  load average: 0.11, 0.19, 0.18 
+151 processes: 147 sleeping, 4 running, 0 zombie, 0 stopped 
+CPU states:  cpu    user    nice  system    irq  softirq  iowait    idle 
+total   12.5%    0.0%    6.7%   0.0%     0.0%    5.3%   75.2% 
+Mem:  1026912k av,  999548k used,   27364k free,       0k shrd,  116104k buff 
+758312k actv,  145904k in_d,   16192k in_c 
+Swap: 2041192k av,  122224k used, 1918968k free                  590140k cached 
+
+PID USER     PRI  NI  SIZE  RSS SHARE STAT %CPU %MEM   TIME CPU COMMAND 
+451 oracle    15   0  6044 4928  4216 S     0.1  0.4   0:20   0 tnslsnr 
+8991 oracle    15   0  1248 1248   896 R     0.1  0.1   0:00   0 top 
+1 root      19   0   440  400   372 S     0.0  0.0   0:04   0 init 
+2 root      15   0     0    0     0 SW    0.0  0.0   0:00   0 keventd 
+3 root      15   0     0    0     0 SW    0.0  0.0   0:00   0 kapmd 
+4 root      34  19     0    0     0 SWN   0.0  0.0   0:00   0 ksoftirqd/0 
+7 root      15   0     0    0     0 SW    0.0  0.0   0:01   0 bdflush 
+5 root      15   0     0    0     0 SW    0.0  0.0   0:33   0 kswapd 
+6 root      15   0     0    0     0 SW    0.0  0.0   0:14   0 kscand 
+8 root      15   0     0    0     0 SW    0.0  0.0   0:00   0 kupdated 
+9 root      25   0     0    0     0 SW    0.0  0.0   0:00   0 mdrecoveryd
+
+... output snipped ...
+Let's examine the different types of information produced. The first line:
+
+18:46:13 up 11 days, 21:50, 5 users, load average: 0.11, 0.19, 0.18
+shows the current time (18:46:13), that system has been up for 11 days; that the system has been working for 21 hours 50 seconds. 
+The load average of the system is shown (0.11, 0.19, 0.18) for the last 1, 5 and 15 minutes respectively. 
+(By the way, you can also get this information by issuing the uptime command.)
+
+If the load average is not required, press the letter "l" (lowercase L); it will turn it off. 
+To turn it back on press l again. The second line:
+
+151 processes: 147 sleeping, 4 running, 0 zombie, 0 stopped
+shows the number of processes, running, sleeping, etc. The third and fourth lines:
+
+CPU states:  cpu    user    nice  system    irq  softirq  iowait    idle 
+total   12.5%    0.0%    6.7%   0.0%     0.0%    5.3%   75.2%
+CPU states:  cpu    user    nice  system    irq  softirq  iowait    idle 
+total   12.5%    0.0%    6.7%   0.0%     0.0%    5.3%   75.2%
+show the CPU utilization details. 
+The above line shows that user processes consume 12.5% and system consumes 6.7%.
+The user processes include the Oracle processes. Press "t" to turn these three lines off and on.
+If there are more than one CPU, you will see one line per CPU.
+
+The next two lines:
+
+Mem:  1026912k av, 1000688k used,  26224k free,    0k shrd,  113624k buff 
+758668k actv,  146872k in_d,  14460k in_c
+Swap: 2041192k av, 122476k used,   1918716k free             591776k cached
+Mem:  1026912k av, 1000688k used,  26224k free,    0k shrd,  113624k buff 
+758668k actv,  146872k in_d,  14460k in_c
+Swap: 2041192k av, 122476k used,   1918716k free             591776k cached
+show the memory available and utilized. Total memory is "1026912k av", approximately 1GB, of which only 26224k or 26MB is free.
+The swap space is 2GB; but it's almost not used. To turn it off and on, press "m".
+
+The rest of the display shows the processes in a tabular format. Here is the explanation of the columns:
+
+Column	Description
+PID	    The process ID of the process
+USER	  The user running the process
+PRI	    The priority of the process
+NI	    The nice value: The higher the value, the lower the priority of the task
+SIZE	  Memory used by this process (code+data+stack)
+RSS	    The physical memory used by this process
+SHARE	  The shared memory used by this process
+%CPU	  The percentage of CPU used by this process
+%MEM	  The percentage of memory used by this process
+TIME	  The total CPU time used by this process
+STAT	  The status of this process, shown in code. Some major status codes are:
+R – Running
+S – Sleeping
+Z – Zombie
+T – Stopped
+You can also see second and third characters, which indicate:
+W – Swapped out process
+N – positive nice value
+
+CPU	If this is a multi-processor system, this column indicates the ID of the CPU this process is running on.
+COMMAND	The command issued by this process
+While the top is being displayed, you can press a few keys to format the display as you like. 
+Pressing the uppercase M key sorts the output by memory usage. 
+(Note that using lowercase m will turn the memory summary lines on or off at the top of the display.) 
+This is very useful when you want to find out who is consuming the memory. Here is sample output:
+
+PID USER     PRI  NI  SIZE  RSS SHARE STAT %CPU %MEM   TIME CPU COMMAND 
+31903 oracle    15   0 75760  72M 72508 S     0.0  7.2   0:01   0 ora_smon_PRODB2 
+31909 oracle    15   0 68944  66M 64572 S     0.0  6.6   0:03   0 ora_mmon_PRODB2 
+31897 oracle    15   0 53788  49M 48652 S     0.0  4.9   0:00   0 ora_dbw0_PRODB2
+PID USER     PRI  NI  SIZE  RSS SHARE STAT %CPU %MEM   TIME CPU COMMAND 
+31903 oracle    15   0 75760  72M 72508 S     0.0  7.2   0:01   0 ora_smon_PRODB2 
+31909 oracle    15   0 68944  66M 64572 S     0.0  6.6   0:03   0 ora_mmon_PRODB2 
+31897 oracle    15   0 53788  49M 48652 S     0.0  4.9   0:00   0 ora_dbw0_PRODB2
+Now that you learned how to interpret the output, let's see how to use command line parameters.
+
+The most useful is -d, which indicates the delay between the screen refreshes. To refresh every second, use top -d 1.
+
+The other useful option is -p. If you want to monitor only a few processes, not all, you can specify only those after the -p option. 
+To monitor processes 13609, 13608 and 13554, issue:
+
+top -p 13609 -p 13608 -p 13554
+
+This will show results in the same format as the top command, but only those specific processes.
+
+Tip for Oracle Users
+It's probably needless to say that the top utility comes in very handy for analyzing the performance of database servers. 
+Here is a partial top output.
+
+20:51:14  up 11 days, 23:55,  4 users,  load average: 0.88, 0.39, 0.27 
+113 processes: 110 sleeping, 2 running, 1 zombie, 0 stopped 
+CPU states:  cpu    user    nice  system    irq  softirq  iowait    idle 
+total    1.0%    0.0%    5.6%   2.2%     0.0%   91.2%    0.0% 
+Mem:  1026912k av, 1008832k used,   18080k free,       0k shrd,   30064k buff 
+771512k actv,  141348k in_d,   13308k in_c 
+Swap: 2041192k av,   66776k used, 1974416k free                  812652k cached 
+
+PID USER     PRI  NI  SIZE  RSS SHARE STAT %CPU %MEM   TIME CPU COMMAND 
+16143 oracle    15   0 39280  32M 26608 D     4.0  3.2   0:02   0 oraclePRODB2...
+5 root      15   0     0    0     0 SW    1.6  0.0   0:33   0 kswapd
+
+... output snipped ...
+
+20:51:14  up 11 days, 23:55,  4 users,  load average: 0.88, 0.39, 0.27 
+113 processes: 110 sleeping, 2 running, 1 zombie, 0 stopped 
+CPU states:  cpu    user    nice  system    irq  softirq  iowait    idle 
+total    1.0%    0.0%    5.6%   2.2%     0.0%   91.2%    0.0% 
+Mem:  1026912k av, 1008832k used,   18080k free,       0k shrd,   30064k buff 
+771512k actv,  141348k in_d,   13308k in_c 
+Swap: 2041192k av,   66776k used, 1974416k free                  812652k cached 
+
+PID USER     PRI  NI  SIZE  RSS SHARE STAT %CPU %MEM   TIME CPU COMMAND 
+16143 oracle    15   0 39280  32M 26608 D     4.0  3.2   0:02   0 oraclePRODB2...
+5 root      15   0     0    0     0 SW    1.6  0.0   0:33   0 kswapd
+
+... output snipped ...
+Let's analyze the output carefully. The first thing you should notice is the "idle" column under CPU states;it's 0.0%—meaning, the CPU is completely occupied doing something.
+The question is, doing what? Move your attention to the column "system", just slightly left; it shows 5.6%. 
+So the system itself is not doing much. Go even more left to the column marked "user", which shows 1.0%. 
+Since user processes include Oracle as well, Oracle is not consuming the CPU cycles. So, what's eating up all the CPU?
+
+The answer lies in the same line, just to the right under the column "iowait", which indicates 91.2%.
+This explains it all: the CPU is waiting for IO 91.2% of the time.
+
+So why so much IO wait? The answer lies in the display. Note the PID of the highest consuming process: 16143. 
+You can use the following query to determine what the process is doing:
+
+select s.sid, s.username, s.program
+from v$session s, v$process p
+where spid = 16143
+and p.addr = s.paddr
+/
+
+SID USERNAME PROGRAM
+------------------- -----------------------------
+159 SYS      rman@prolin2 (TNS V1-V3)
+select s.sid, s.username, s.program
+from v$session s, v$process p
+where spid = 16143
+and p.addr = s.paddr
+/
+
+SID USERNAME PROGRAM
+------------------- -----------------------------
+159 SYS      rman@prolin2 (TNS V1-V3)
+The rman process is taking up the IO waits related CPU cycles. This information helps you determine the next course of action.
+
+skill and snice
+From the previous discussion you learned how to identify a CPU consuming resource.
+What if you find that a process is consuming a lot of CPU and memory, but you don't want to kill it? Consider the top output below:
+
+$ top -c -p 16514
+
+23:00:44  up 12 days,  2:04,  4 users,  load average: 0.47, 0.35, 0.31 
+1 processes: 1 sleeping, 0 running, 0 zombie, 0 stopped 
+CPU states:  cpu    user    nice  system    irq  softirq  iowait    idle 
+total    0.0%    0.6%    8.7%   2.2%     0.0%   88.3%    0.0% 
+Mem:  1026912k av, 1010476k used,   16436k free,       0k shrd,   52128k buff 
+766724k actv,  143128k in_d,   14264k in_c 
+Swap: 2041192k av,   83160k used, 1958032k free                  799432k cached 
+
+PID USER     PRI  NI  SIZE  RSS SHARE STAT %CPU %MEM   TIME CPU COMMAND 
+16514 oracle    19   4 28796  26M 20252 D N   7.0  2.5   0:03   0 oraclePRODB2...
+$ top -c -p 16514
+
+23:00:44  up 12 days,  2:04,  4 users,  load average: 0.47, 0.35, 0.31 
+1 processes: 1 sleeping, 0 running, 0 zombie, 0 stopped 
+CPU states:  cpu    user    nice  system    irq  softirq  iowait    idle 
+total    0.0%    0.6%    8.7%   2.2%     0.0%   88.3%    0.0% 
+Mem:  1026912k av, 1010476k used,   16436k free,       0k shrd,   52128k buff 
+766724k actv,  143128k in_d,   14264k in_c 
+Swap: 2041192k av,   83160k used, 1958032k free                  799432k cached 
+
+PID USER     PRI  NI  SIZE  RSS SHARE STAT %CPU %MEM   TIME CPU COMMAND 
+16514 oracle    19   4 28796  26M 20252 D N   7.0  2.5   0:03   0 oraclePRODB2...
+Now that you confirmed the process 16514 is consuming a lot of memory, you can "freeze" it—but not kill it—using the skill command.
+
+$ skill -STOP 1
+After this, check the top output:
+
+23:01:11  up 12 days,  2:05,  4 users,  load average: 1.20, 0.54, 0.38 
+1 processes: 0 sleeping, 0 running, 0 zombie, 1 stopped 
+CPU states:  cpu    user    nice  system    irq  softirq  iowait    idle 
+total    2.3%    0.0%    0.3%   0.0%     0.0%    2.3%   94.8% 
+Mem:  1026912k av, 1008756k used,   18156k free,       0k shrd,    3976k buff 
+770024k actv,  143496k in_d,   12876k in_c 
+Swap: 2041192k av,   83152k used, 1958040k free                  851200k cached 
+
+PID USER     PRI  NI  SIZE  RSS SHARE STAT %CPU %MEM   TIME CPU COMMAND 
+16514 oracle    19   4 28796  26M 20252 T N   0.0  2.5   0:04   0 oraclePRODB2...
+23:01:11  up 12 days,  2:05,  4 users,  load average: 1.20, 0.54, 0.38 
+1 processes: 0 sleeping, 0 running, 0 zombie, 1 stopped 
+CPU states:  cpu    user    nice  system    irq  softirq  iowait    idle 
+total    2.3%    0.0%    0.3%   0.0%     0.0%    2.3%   94.8% 
+Mem:  1026912k av, 1008756k used,   18156k free,       0k shrd,    3976k buff 
+770024k actv,  143496k in_d,   12876k in_c 
+Swap: 2041192k av,   83152k used, 1958040k free                  851200k cached 
+
+PID USER     PRI  NI  SIZE  RSS SHARE STAT %CPU %MEM   TIME CPU COMMAND 
+16514 oracle    19   4 28796  26M 20252 T N   0.0  2.5   0:04   0 oraclePRODB2...
+The CPU is now 94% idle from 0%. The process is effectively frozen. After some time, you may want to revive the process from coma:
+
+$ skill -CONT 16514
+This approach is immensely useful for temporarily freezing processes to make room for more important processes to complete.
+
+The command is very versatile. If you want to stop all processes of the user "oracle", only one command does it all:
+
+$ skill -STOP oracle
+You can use a user, a PID, a command or terminal id as argument. The following stops all rman commands.
+
+$ skill -STOP rman
+As you can see, skill decides that argument you entered—a process ID, userid, or command—and acts appropriately. This may cause an issue in some cases, where you may have a user and a command in the same name. The best example is the "oracle" process, which is typically run by the user "oracle". So, when you want to stop the process called "oracle" and you issue:
+
+$ skill -STOP oracle
+all the processes of user "oracle" stop, including the session you may be on. To be completely unambiguous you can optionally give a new parameter to specify the type of the parameter. To stop a command called oracle, you can give:
+
+$ skill -STOP -c oracle
+The command snice is similar. Instead of stopping a process it makes its priority a lower one. First, check the top output:
+
+PID USER     PRI  NI  SIZE  RSS SHARE STAT %CPU %MEM   TIME CPU COMMAND 
+    3 root      15   0     0    0     0 RW    0.0  0.0   0:00   0 kapmd 
+13680 oracle    15   0 11336  10M  8820 T     0.0  1.0   0:00   0 oracle 
+13683 oracle    15   0  9972 9608  7788 T     0.0  0.9   0:00   0 oracle 
+13686 oracle    15   0  9860 9496  7676 T     0.0  0.9   0:00   0 oracle 
+13689 oracle    15   0 10004 9640  7820 T     0.0  0.9   0:00   0 oracle 
+13695 oracle    15   0  9984 9620  7800 T     0.0  0.9   0:00   0 oracle 
+13698 oracle    15   0 10064 9700  7884 T     0.0  0.9   0:00   0 oracle 
+13701 oracle    15   0 22204  21M 16940 T     0.0  2.1   0:00   0 oracle
+PID USER     PRI  NI  SIZE  RSS SHARE STAT %CPU %MEM   TIME CPU COMMAND 
+    3 root      15   0     0    0     0 RW    0.0  0.0   0:00   0 kapmd 
+13680 oracle    15   0 11336  10M  8820 T     0.0  1.0   0:00   0 oracle 
+13683 oracle    15   0  9972 9608  7788 T     0.0  0.9   0:00   0 oracle 
+13686 oracle    15   0  9860 9496  7676 T     0.0  0.9   0:00   0 oracle 
+13689 oracle    15   0 10004 9640  7820 T     0.0  0.9   0:00   0 oracle 
+13695 oracle    15   0  9984 9620  7800 T     0.0  0.9   0:00   0 oracle 
+13698 oracle    15   0 10064 9700  7884 T     0.0  0.9   0:00   0 oracle 
+13701 oracle    15   0 22204  21M 16940 T     0.0  2.1   0:00   0 oracle
+Now, drop the priority of the processes of "oracle" by four points. Note that the higher the number, the lower the priority.
+
+$ snice +4 -u oracle
+
+  PID USER     PRI  NI  SIZE  RSS SHARE STAT %CPU %MEM   TIME CPU COMMAND 
+16894 oracle    20   4 38904  32M 26248 D N   5.5  3.2   0:01   0 oracle
+$ snice +4 -u oracle
+
+  PID USER     PRI  NI  SIZE  RSS SHARE STAT %CPU %MEM   TIME CPU COMMAND 
+16894 oracle    20   4 38904  32M 26248 D N   5.5  3.2   0:01   0 oracle
+Note how the NI column (for nice values) is now 4 and the priority is now set to 20, instead of 15. 
+This is quite useful in reducing priorities.
